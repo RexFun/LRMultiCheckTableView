@@ -10,10 +10,16 @@
 
 @interface ViewController : UIViewController <UITableViewDataSource,UITableViewDelegate>
 
-@property (nonatomic, strong) NSArray *arr1;
-@property (nonatomic, strong) NSArray *arr2;
-@property (nonatomic, strong) UITableView *tb1;
-@property (nonatomic, strong) UITableView *tb2;
+@property (nonatomic, strong) NSArray *arr_l1;
+@property (nonatomic, strong) NSArray *arr_r1;
+@property (nonatomic, strong) NSArray *arr_r2;
+@property (nonatomic, strong) NSArray *arr_r3;
+@property (nonatomic, strong) NSArray *arr_r4;
+@property (nonatomic, strong) NSArray *arr_r5;
+@property (nonatomic, strong) NSArray *arr_r6;
+@property (nonatomic, strong) UITableView *tb_l;
+@property (nonatomic, strong) UITableView *tb_r;
+@property NSInteger *cur_idx;
 
 @end
 
