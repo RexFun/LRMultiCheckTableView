@@ -54,32 +54,37 @@
     self.arr_r4 = [[NSArray alloc] initWithObjects:@"D1",@"D2",@"D3",@"D4",@"D5", nil];
     self.arr_r5 = [[NSArray alloc] initWithObjects:@"E1",@"E2",@"E3",@"E4",@"E5", nil];
     self.arr_r6 = [[NSArray alloc] initWithObjects:@"F1",@"F2",@"F3",@"F4",@"F5", nil];
+    
+
 }
 
 - (void)initView {
     UIView *mainView = [[UIView alloc] initWithFrame:CGRectMake(10, 20, MAIN_VIEW_W , MAIN_VIEW_H)];
     [mainView setBackgroundColor:[UIColor blackColor]];
-    //左列表
+    // 左列表
     self.tb_l = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, TB_VIEW_W ,MAIN_VIEW_H)];
     self.tb_l.dataSource = self;
     self.tb_l.delegate = self;
     [mainView addSubview:self.tb_l];
-    //右列表
+    // 右列表
     self.tb_r = [[UITableView alloc] initWithFrame:CGRectMake(TB_VIEW_W, 0, TB_VIEW_W ,MAIN_VIEW_H)];
     self.tb_r.dataSource = self;
     self.tb_r.delegate = self;
     [mainView addSubview:self.tb_r];
     // 底部操作栏(采用约束布局)
     UIView *bottomBarView = [[UIView alloc] init];
-    bottomBarView.backgroundColor = [UIColor redColor];
+    bottomBarView.backgroundColor = [UIColor lightGrayColor];
     // 底部操作栏 # 重置按钮
     UIButton *resetBtn = [[UIButton alloc] init];
-    resetBtn.backgroundColor = [UIColor yellowColor];
+    resetBtn.backgroundColor = [UIColor whiteColor];
+    [resetBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [resetBtn setTitle:@"重置" forState:UIControlStateNormal];
+    [resetBtn addTarget:self action:@selector(resetTap) forControlEvents:UIControlEventTouchUpInside];
+
     [bottomBarView addSubview:resetBtn];
     // 底部操作栏 # 确定按钮
     UIButton *okBtn = [[UIButton alloc] init];
-    okBtn.backgroundColor = [UIColor blueColor];
+    okBtn.backgroundColor = [UIColor redColor];
     [okBtn setTitle:@"确定" forState:UIControlStateNormal];
     [bottomBarView addSubview:okBtn];
     //
@@ -87,7 +92,8 @@
     //
     [self.view addSubview:mainView];
     
-    //设置约束
+    // 设置控件约束
+    // 设置控件约束 # 底部操作栏
     bottomBarView.translatesAutoresizingMaskIntoConstraints = NO;
     [mainView addConstraint:[NSLayoutConstraint constraintWithItem:bottomBarView
                                                          attribute:NSLayoutAttributeWidth
@@ -117,7 +123,7 @@
                                                          attribute:NSLayoutAttributeLeft
                                                         multiplier:1
                                                           constant:0]];
-    
+    // 设置控件约束 # 底部操作栏 # 重置按钮
     resetBtn.translatesAutoresizingMaskIntoConstraints = NO;
     [bottomBarView addConstraint:[NSLayoutConstraint constraintWithItem:resetBtn
                                                               attribute:NSLayoutAttributeLeft
@@ -146,8 +152,8 @@
                                                                  toItem:bottomBarView
                                                               attribute:NSLayoutAttributeHeight
                                                              multiplier:1
-                                                               constant:0]];
-    
+                                                               constant:-0.5]];
+    // 设置控件约束 # 底部操作栏 # 确定按钮
     okBtn.translatesAutoresizingMaskIntoConstraints = NO;
     [bottomBarView addConstraint:[NSLayoutConstraint constraintWithItem:okBtn
                                                               attribute:NSLayoutAttributeRight
@@ -231,7 +237,38 @@
     if (tableView == self.tb_l) {
         self.cur_idx = [[(NSDictionary *)[self.arr_l1 objectAtIndex:indexPath.row] objectForKey:@"id"] integerValue];
         [self.tb_r reloadData];
+    } else if (tableView == self.tb_r) {
+        if (self.cur_idx == 1) {
+            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
+            id _arr_obj = [self.arr_r1 objectAtIndex:indexPath.row];
+            if (![_arr containsObject:_arr_obj])
+                [_arr addObject:[self.arr_r1 objectAtIndex:indexPath.row]];
+            else
+                [_arr removeObject:_arr_obj];
+            NSLog(@"after -> %@",[self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]]);
+        }
+//        else if (self.cur_idx == 2)
+//
+//        else if (self.cur_idx == 3)
+//
+//        else if (self.cur_idx == 4)
+//
+//        else if (self.cur_idx == 5)
+//
+//        else if (self.cur_idx == 6)
     }
 }
 
+#pragma mark 重置按钮事件
+-(void)resetTap {
+    [self resetDone];
+}
+-(void)resetDone {
+    if (self.dict_selected != nil) [self.dict_selected removeAllObjects];
+    else self.dict_selected = [[NSMutableDictionary alloc] init];
+    for(int i=0; i<self.arr_l1.count; i++) {
+        [self.dict_selected setObject:[[NSMutableArray alloc] init] forKey:[[(NSDictionary *)[self.arr_l1 objectAtIndex:i] objectForKey:@"id"] stringValue]];
+    }
+    NSLog(@"%@",self.dict_selected);
+}
 @end
