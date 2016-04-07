@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		716205801CB5F54F00F63F3E /* LRMultiCheckTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7162057F1CB5F54F00F63F3E /* LRMultiCheckTableView.m */; };
 		716883001CACEE790092C884 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 716882FF1CACEE790092C884 /* main.m */; };
 		716883031CACEE790092C884 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 716883021CACEE790092C884 /* AppDelegate.m */; };
 		716883061CACEE790092C884 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 716883051CACEE790092C884 /* ViewController.m */; };
@@ -16,6 +17,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7162057E1CB5F54F00F63F3E /* LRMultiCheckTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRMultiCheckTableView.h; sourceTree = "<group>"; };
+		7162057F1CB5F54F00F63F3E /* LRMultiCheckTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRMultiCheckTableView.m; sourceTree = "<group>"; };
 		716882FB1CACEE790092C884 /* MulitUITableView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MulitUITableView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		716882FF1CACEE790092C884 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		716883011CACEE790092C884 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -67,6 +70,8 @@
 				7168830C1CACEE790092C884 /* LaunchScreen.storyboard */,
 				7168830F1CACEE790092C884 /* Info.plist */,
 				716882FE1CACEE790092C884 /* Supporting Files */,
+				7162057E1CB5F54F00F63F3E /* LRMultiCheckTableView.h */,
+				7162057F1CB5F54F00F63F3E /* LRMultiCheckTableView.m */,
 			);
 			path = MulitUITableView;
 			sourceTree = "<group>";
@@ -149,6 +154,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				716205801CB5F54F00F63F3E /* LRMultiCheckTableView.m in Sources */,
 				716883061CACEE790092C884 /* ViewController.m in Sources */,
 				716883031CACEE790092C884 /* AppDelegate.m in Sources */,
 				716883001CACEE790092C884 /* main.m in Sources */,
@@ -300,6 +306,7 @@
 				716883141CACEE790092C884 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
