@@ -16,16 +16,14 @@
 
 @implementation LRMultiCheckTableView
 
-- (instancetype)init {
-    return [self initWithFrame: CGRectZero];
+// setter
+- (void)setDelegate:(id <LRMultiCheckTableViewDelegate>)_delegate {
+    delegate = _delegate;
+    [self drawView];
 }
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
-    if (self) {
-        [self drawView];
-    }
-    return self;
+// getter
+- (id <LRMultiCheckTableViewDelegate>)delegate {
+    return delegate;
 }
 
 - (void)drawView {
@@ -159,11 +157,11 @@
 }
 
 - (void)didLoadDataToTableView {
-    if (self.delegate == nil) {
+    if (delegate == nil) {
         NSLog(@"delegate is nil !");
         return;
     }
-    NSString *json_l = [self.delegate didLoadDataToLeftTableView];
+    NSString *json_l = [delegate didLoadDataToLeftTableView];
     
     NSLog(@"json -> %@", json_l);
     NSData *data   = [json_l dataUsingEncoding:NSUTF8StringEncoding];

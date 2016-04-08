@@ -17,7 +17,10 @@
 {
      id <LRMultiCheckTableViewDelegate> delegate;
 }
-@property (nonatomic, weak) id <LRMultiCheckTableViewDelegate> delegate;
+// setter
+- (void)setDelegate:(id <LRMultiCheckTableViewDelegate>)_delegate;
+// getter
+- (id <LRMultiCheckTableViewDelegate>)delegate;
 
 @property (nonatomic, strong) NSArray     *arr_l1;
 @property (nonatomic, strong) NSArray     *arr_r1;
@@ -43,6 +46,5 @@
  */
 @property (nonatomic, strong) NSMutableDictionary *dict_selected;
 
-- (void)drawView;
 @end
 
