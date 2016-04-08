@@ -8,6 +8,12 @@
 
 #import "LRMultiCheckTableView.h"
 
+// rgb颜色转换（16进制->10进制）
+#define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+// 获取RGB颜色
+#define RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
+#define RGB(r,g,b) RGBA(r,g,b,1.0f)
+
 #define WEIGHT [UIScreen mainScreen].bounds.size.width
 #define HEIGHT [UIScreen mainScreen].bounds.size.height
 #define MAIN_VIEW_W [UIScreen mainScreen].bounds.size.width-20
@@ -39,11 +45,13 @@
     [self.tb_l selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
                            animated:YES
                      scrollPosition:UITableViewScrollPositionTop];
+    self.tb_l.tableFooterView = [[UIView alloc]init];//去掉多余分割线
     [self addSubview:self.tb_l];
     // 右列表
     self.tb_r            = [[UITableView alloc] initWithFrame:CGRectMake(TB_VIEW_W, 0, TB_VIEW_W ,MAIN_VIEW_H)];
     self.tb_r.dataSource = self;
     self.tb_r.delegate   = self;
+    self.tb_r.tableFooterView = [[UIView alloc]init];//去掉多余分割线
     [self addSubview:self.tb_r];
     // 底部操作栏(采用约束布局)
     self.bar_bottom                 = [[UIView alloc] init];
@@ -167,7 +175,8 @@
     }
     self.arrL = [self jsonStrToArr:[delegate didLoadDataToViewL]];
     self.arrR = [self jsonStrToArr:[delegate didLoadDataToViewR:[self.arrL objectAtIndex:0]]];
-    self.curIndex = [[(NSDictionary *)[self.arrL objectAtIndex:0] objectForKey:@"id"] integerValue];
+    self.curIndex = [(NSDictionary *)[self.arrL objectAtIndex:0] objectForKey:@"id"];
+    NSLog(@"%@",self.curIndex);
 }
 
 #pragma mark UITableViewDataSource
@@ -195,17 +204,21 @@
         NSDictionary *_d     = (NSDictionary *)[self.arrL objectAtIndex:indexPath.row];
         cell.tag             = [_d objectForKey:@"id"];
         cell.textLabel.text  = [NSString stringWithFormat: @"%@", [_d objectForKey:@"name"]];
+        // 判断选中背景变色
+        cell.selectionStyle  = UITableViewCellSelectionStyleNone;
+        if(cell.tag == self.curIndex) cell.backgroundColor = UIColorFromRGB(0xF0F0F0);
+        else                          cell.backgroundColor = [UIColor clearColor];
     } else if (tableView == self.tb_r) {
-        NSDictionary *_d = (NSDictionary *)[self.arrR objectAtIndex:indexPath.row];
+        NSDictionary *_d    = (NSDictionary *)[self.arrR objectAtIndex:indexPath.row];
         cell.tag            = [_d objectForKey:@"id"];
         cell.textLabel.text = [NSString stringWithFormat: @"%@", [_d objectForKey:@"name"]];
-        //判断是否打钩
-        NSMutableArray *_arr = [self.dataSelected objectForKey:[NSString stringWithFormat:@"%d", self.curIndex]];
+        // 判断选中打钩
+        cell.selectionStyle  = UITableViewCellSelectionStyleNone;
+        cell.backgroundColor = UIColorFromRGB(0xF0F0F0);
+        NSMutableArray *_arr = [self.dataSelected objectForKey:self.curIndex];
         id _arr_obj          = [_d objectForKey:@"id"];
-        if ([_arr containsObject:_arr_obj])
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        else
-            cell.accessoryType = UITableViewCellAccessoryNone;
+        if ([_arr containsObject:_arr_obj]) cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        else                                cell.accessoryType = UITableViewCellAccessoryNone;
     }
     return cell;
 }
@@ -218,7 +231,7 @@
     // 左列表
     if (tableView == self.tb_l) {
         NSDictionary *selectedItemDict = (NSDictionary *)[self.arrL objectAtIndex:indexPath.row];
-        self.curIndex = [[selectedItemDict objectForKey:@"id"] integerValue];
+        self.curIndex = [selectedItemDict objectForKey:@"id"];
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             // 处理耗时操作的代码块...
             self.arrR = [self jsonStrToArr:[delegate didLoadDataToViewR:selectedItemDict]];
@@ -226,13 +239,13 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 //回调或者说是通知主线程刷新，
                 [self.tb_r reloadData];
-            });    
-            
+            });
         });
+        [self.tb_l reloadData];
     }
     // 右列表
     else if (tableView == self.tb_r) {
-        NSMutableArray *_arr = [self.dataSelected objectForKey:[NSString stringWithFormat:@"%d", self.curIndex]];
+        NSMutableArray *_arr = [self.dataSelected objectForKey:self.curIndex];
         id _arr_obj          = [[self.arrR objectAtIndex:indexPath.row] objectForKey:@"id"];
         if (![_arr containsObject:_arr_obj])
             [_arr addObject:_arr_obj];
@@ -241,6 +254,33 @@
         [self.tb_r reloadData];
         NSLog(@"after -> %@",_arr);
     }
+}
+
+#pragma mark 分割线顶头
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (tableView == self.tb_l) {
+        /*
+         *以下代码兼容IOS6-8
+         *IOS7仅需要设置separatorInset为UIEdgeInsetsZero就可以让分割线顶头了
+         *而IOS8需要将separatorInset设置为UIEdgeInsetsZero并且还需要将tabelView和tabelViewCell的layoutMargins设置为UIEdgeInsetsZero
+         */
+        
+        //setSeparatorInset IOS7之后才支持
+        if ([tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+            [tableView setSeparatorInset:UIEdgeInsetsZero];
+        }
+        
+        //setLayoutMargins IOS8之后才支持
+        if ([tableView respondsToSelector:@selector(setLayoutMargins:)]) {
+            [tableView setLayoutMargins:UIEdgeInsetsZero];
+        }
+        
+        if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+            [cell setLayoutMargins:UIEdgeInsetsZero];
+        }
+    }
+//     不要分割线
+//    if (tableView == self.tb_r) tableView.separatorStyle = NO;
 }
 
 #pragma mark 重置按钮事件
@@ -253,7 +293,7 @@
     if (self.dataSelected != nil) [self.dataSelected removeAllObjects];
     else self.dataSelected = [[NSMutableDictionary alloc] init];
     for(int i=0; i<self.arrL.count; i++) {
-        [self.dataSelected setObject:[[NSMutableArray alloc] init] forKey:[[(NSDictionary *)[self.arrL objectAtIndex:i] objectForKey:@"id"] stringValue]];
+        [self.dataSelected setObject:[[NSMutableArray alloc] init] forKey:[(NSDictionary *)[self.arrL objectAtIndex:i] objectForKey:@"id"]];
     }
     NSLog(@"%@",self.dataSelected);
 }

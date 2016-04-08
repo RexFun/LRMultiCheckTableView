@@ -31,7 +31,7 @@
 @property (nonatomic, strong) UIButton    *btn_reset;
 @property (nonatomic, strong) UIButton    *btn_ok;
 
-@property NSInteger *curIndex;
+@property id curIndex;
 
 /* 已选数组集合，数据结构：
 
