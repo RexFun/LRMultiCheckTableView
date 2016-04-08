@@ -10,7 +10,8 @@
 
 @protocol LRMultiCheckTableViewDelegate<NSObject>
 @required
-- (NSString *)didLoadDataToLeftTableView;
+- (NSString *)didLoadDataToViewL;
+- (NSString *)didLoadDataToViewR:(id)itemViewL;
 @end
 
 @interface LRMultiCheckTableView : UIView <UITableViewDataSource,UITableViewDelegate>
@@ -22,20 +23,15 @@
 // getter
 - (id <LRMultiCheckTableViewDelegate>)delegate;
 
-@property (nonatomic, strong) NSArray     *arr_l1;
-@property (nonatomic, strong) NSArray     *arr_r1;
-@property (nonatomic, strong) NSArray     *arr_r2;
-@property (nonatomic, strong) NSArray     *arr_r3;
-@property (nonatomic, strong) NSArray     *arr_r4;
-@property (nonatomic, strong) NSArray     *arr_r5;
-@property (nonatomic, strong) NSArray     *arr_r6;
+@property (nonatomic, strong) NSArray     *arrL;
+@property (nonatomic, strong) NSArray     *arrR;
 @property (nonatomic, strong) UITableView *tb_l;
 @property (nonatomic, strong) UITableView *tb_r;
 @property (nonatomic, strong) UIView      *bar_bottom;
 @property (nonatomic, strong) UIButton    *btn_reset;
 @property (nonatomic, strong) UIButton    *btn_ok;
 
-@property NSInteger *cur_idx;
+@property NSInteger *curIndex;
 
 /* 已选数组集合，数据结构：
 
@@ -44,7 +40,7 @@
  {key:[1,2,3,...]},
  ...
  */
-@property (nonatomic, strong) NSMutableDictionary *dict_selected;
+@property (nonatomic, strong) NSMutableDictionary *dataSelected;
 
 @end
 

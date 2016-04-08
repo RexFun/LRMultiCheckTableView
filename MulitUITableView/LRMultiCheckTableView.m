@@ -27,7 +27,7 @@
 }
 
 - (void)drawView {
-    [self didLoadDataToTableView];
+    [self didLoadDataToView];
     [self resetDone];
     self.frame = CGRectMake(10, 20, MAIN_VIEW_W , MAIN_VIEW_H);
     [self setBackgroundColor:[UIColor blackColor]];
@@ -35,6 +35,10 @@
     self.tb_l            = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, TB_VIEW_W ,MAIN_VIEW_H)];
     self.tb_l.dataSource = self;
     self.tb_l.delegate   = self;
+    // 默认选中第一行
+    [self.tb_l selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
+                           animated:YES
+                     scrollPosition:UITableViewScrollPositionTop];
     [self addSubview:self.tb_l];
     // 右列表
     self.tb_r            = [[UITableView alloc] initWithFrame:CGRectMake(TB_VIEW_W, 0, TB_VIEW_W ,MAIN_VIEW_H)];
@@ -156,55 +160,23 @@
                                                                constant:0]];
 }
 
-- (void)didLoadDataToTableView {
+- (void)didLoadDataToView {
     if (delegate == nil) {
         NSLog(@"delegate is nil !");
         return;
     }
-    NSString *json_l = [delegate didLoadDataToLeftTableView];
-    
-    NSLog(@"json -> %@", json_l);
-    NSData *data   = [json_l dataUsingEncoding:NSUTF8StringEncoding];
-    NSError *error = nil;
-    id jsonObject  = [NSJSONSerialization JSONObjectWithData:data
-                                                     options:NSJSONReadingAllowFragments
-                                                       error:&error];
-    if ([jsonObject isKindOfClass:[NSDictionary class]]){
-        NSDictionary *dictionary = (NSDictionary *)jsonObject;
-        //        NSLog(@"Dersialized JSON Dictionary = %@", dictionary);
-    } else if ([jsonObject isKindOfClass:[NSArray class]]){
-        NSArray *nsArray = (NSArray *)jsonObject;
-        //        NSLog(@"Dersialized JSON Array = %@", nsArray);
-    } else {
-        //        NSLog(@"An error happened while deserializing the JSON data.");
-    }
-    NSDictionary *dict = (NSDictionary *)jsonObject;
-    NSArray* arr_l = [dict objectForKey:@"data"];
-    //    NSLog(@"list is %@",arr_l);
-    
-    self.cur_idx = 1;
-    self.arr_l1 = arr_l;
-    self.arr_r1 = [[NSArray alloc] initWithObjects:@"A1",@"A2",@"A3",@"A4",@"A5", nil];
-    self.arr_r2 = [[NSArray alloc] initWithObjects:@"B1",@"B2",@"B3",@"B4",@"B5", nil];
-    self.arr_r3 = [[NSArray alloc] initWithObjects:@"C1",@"C2",@"C3",@"C4",@"C5", nil];
-    self.arr_r4 = [[NSArray alloc] initWithObjects:@"D1",@"D2",@"D3",@"D4",@"D5", nil];
-    self.arr_r5 = [[NSArray alloc] initWithObjects:@"E1",@"E2",@"E3",@"E4",@"E5", nil];
-    self.arr_r6 = [[NSArray alloc] initWithObjects:@"F1",@"F2",@"F3",@"F4",@"F5", nil];
+    self.arrL = [self jsonStrToArr:[delegate didLoadDataToViewL]];
+    self.arrR = [self jsonStrToArr:[delegate didLoadDataToViewR:[self.arrL objectAtIndex:0]]];
+    self.curIndex = [[(NSDictionary *)[self.arrL objectAtIndex:0] objectForKey:@"id"] integerValue];
 }
 
 #pragma mark UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView == self.tb_l) {
-        return self.arr_l1.count;
+        return self.arrL.count;
     } else if (tableView == self.tb_r) {
-        if (self.cur_idx == 1) return self.arr_r1.count;
-        else if (self.cur_idx == 2) return self.arr_r2.count;
-        else if (self.cur_idx == 3) return self.arr_r3.count;
-        else if (self.cur_idx == 4) return self.arr_r4.count;
-        else if (self.cur_idx == 5) return self.arr_r5.count;
-        else if (self.cur_idx == 6) return self.arr_r6.count;
-        else return 0;
+        return self.arrR.count;
     } else {
         return 0;
     }
@@ -220,63 +192,20 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     if (tableView == self.tb_l) {
-        cell.tag            = [(NSDictionary *)[self.arr_l1 objectAtIndex:indexPath.row] objectForKey:@"id"];
-        cell.textLabel.text = [NSString stringWithFormat: @"%@", [(NSDictionary *)[self.arr_l1 objectAtIndex:indexPath.row] objectForKey:@"name"]];
+        NSDictionary *_d     = (NSDictionary *)[self.arrL objectAtIndex:indexPath.row];
+        cell.tag             = [_d objectForKey:@"id"];
+        cell.textLabel.text  = [NSString stringWithFormat: @"%@", [_d objectForKey:@"name"]];
     } else if (tableView == self.tb_r) {
-        if (self.cur_idx == 1) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            NSString *_text      = [NSString stringWithFormat: @"%@", [self.arr_r1 objectAtIndex:indexPath.row]];
-            cell.textLabel.text  = _text;
-            if ([_arr containsObject: _text])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            else
-                cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        else if (self.cur_idx == 2) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            NSString *_text      = [NSString stringWithFormat: @"%@", [self.arr_r2 objectAtIndex:indexPath.row]];
-            cell.textLabel.text  = _text;
-            if ([_arr containsObject:_text])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            else
-                cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        else if (self.cur_idx == 3) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            NSString *_text      = [NSString stringWithFormat: @"%@", [self.arr_r3 objectAtIndex:indexPath.row]];
-            cell.textLabel.text  = _text;
-            if ([_arr containsObject:_text])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            else
-                cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        else if (self.cur_idx == 4) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            NSString *_text      = [NSString stringWithFormat: @"%@", [self.arr_r4 objectAtIndex:indexPath.row]];
-            cell.textLabel.text  = _text;
-            if ([_arr containsObject:_text])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            else
-                cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        else if (self.cur_idx == 5) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            NSString *_text      = [NSString stringWithFormat: @"%@", [self.arr_r5 objectAtIndex:indexPath.row]];
-            cell.textLabel.text  = _text;
-            if ([_arr containsObject:_text])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            else
-                cell.accessoryType = UITableViewCellAccessoryNone;
-        }
-        else if (self.cur_idx == 6) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            NSString *_text      = [NSString stringWithFormat: @"%@", [self.arr_r6 objectAtIndex:indexPath.row]];
-            cell.textLabel.text  = _text;
-            if ([_arr containsObject:_text])
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-            else
-                cell.accessoryType = UITableViewCellAccessoryNone;
-        }
+        NSDictionary *_d = (NSDictionary *)[self.arrR objectAtIndex:indexPath.row];
+        cell.tag            = [_d objectForKey:@"id"];
+        cell.textLabel.text = [NSString stringWithFormat: @"%@", [_d objectForKey:@"name"]];
+        //判断是否打钩
+        NSMutableArray *_arr = [self.dataSelected objectForKey:[NSString stringWithFormat:@"%d", self.curIndex]];
+        id _arr_obj          = [_d objectForKey:@"id"];
+        if ([_arr containsObject:_arr_obj])
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        else
+            cell.accessoryType = UITableViewCellAccessoryNone;
     }
     return cell;
 }
@@ -288,72 +217,29 @@
     UITableViewCell *newCell = [tableView cellForRowAtIndexPath:indexPath];
     // 左列表
     if (tableView == self.tb_l) {
-        self.cur_idx = [[(NSDictionary *)[self.arr_l1 objectAtIndex:indexPath.row] objectForKey:@"id"] integerValue];
-        [self.tb_r reloadData];
+        NSDictionary *selectedItemDict = (NSDictionary *)[self.arrL objectAtIndex:indexPath.row];
+        self.curIndex = [[selectedItemDict objectForKey:@"id"] integerValue];
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            // 处理耗时操作的代码块...
+            self.arrR = [self jsonStrToArr:[delegate didLoadDataToViewR:selectedItemDict]];
+            //通知主线程刷新
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //回调或者说是通知主线程刷新，
+                [self.tb_r reloadData];
+            });    
+            
+        });
     }
     // 右列表
     else if (tableView == self.tb_r) {
-        if (self.cur_idx == 1) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            id _arr_obj          = [self.arr_r1 objectAtIndex:indexPath.row];
-            if (![_arr containsObject:_arr_obj])
-                [_arr addObject:_arr_obj];
-            else
-                [_arr removeObject:_arr_obj];
-            [self.tb_r reloadData];
-            NSLog(@"after -> %@",_arr);
-        }
-        else if (self.cur_idx == 2) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            id _arr_obj          = [self.arr_r2 objectAtIndex:indexPath.row];
-            if (![_arr containsObject:_arr_obj])
-                [_arr addObject:_arr_obj];
-            else
-                [_arr removeObject:_arr_obj];
-            [self.tb_r reloadData];
-            NSLog(@"after -> %@",_arr);
-        }
-        else if (self.cur_idx == 3) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            id _arr_obj          = [self.arr_r3 objectAtIndex:indexPath.row];
-            if (![_arr containsObject:_arr_obj])
-                [_arr addObject:_arr_obj];
-            else
-                [_arr removeObject:_arr_obj];
-            [self.tb_r reloadData];
-            NSLog(@"after -> %@",_arr);
-        }
-        else if (self.cur_idx == 4) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            id _arr_obj          = [self.arr_r4 objectAtIndex:indexPath.row];
-            if (![_arr containsObject:_arr_obj])
-                [_arr addObject:_arr_obj];
-            else
-                [_arr removeObject:_arr_obj];
-            [self.tb_r reloadData];
-            NSLog(@"after -> %@",_arr);
-        }
-        
-        else if (self.cur_idx == 5) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            id _arr_obj          = [self.arr_r5 objectAtIndex:indexPath.row];
-            if (![_arr containsObject:_arr_obj])
-                [_arr addObject:_arr_obj];
-            else
-                [_arr removeObject:_arr_obj];
-            [self.tb_r reloadData];
-            NSLog(@"after -> %@",_arr);
-        }
-        else if (self.cur_idx == 6) {
-            NSMutableArray *_arr = [self.dict_selected objectForKey:[NSString stringWithFormat:@"%d", self.cur_idx]];
-            id _arr_obj          = [self.arr_r6 objectAtIndex:indexPath.row];
-            if (![_arr containsObject:_arr_obj])
-                [_arr addObject:_arr_obj];
-            else
-                [_arr removeObject:_arr_obj];
-            [self.tb_r reloadData];
-            NSLog(@"after -> %@",_arr);
-        }
+        NSMutableArray *_arr = [self.dataSelected objectForKey:[NSString stringWithFormat:@"%d", self.curIndex]];
+        id _arr_obj          = [[self.arrR objectAtIndex:indexPath.row] objectForKey:@"id"];
+        if (![_arr containsObject:_arr_obj])
+            [_arr addObject:_arr_obj];
+        else
+            [_arr removeObject:_arr_obj];
+        [self.tb_r reloadData];
+        NSLog(@"after -> %@",_arr);
     }
 }
 
@@ -364,12 +250,12 @@
     [self.tb_r reloadData];
 }
 -(void)resetDone {
-    if (self.dict_selected != nil) [self.dict_selected removeAllObjects];
-    else self.dict_selected = [[NSMutableDictionary alloc] init];
-    for(int i=0; i<self.arr_l1.count; i++) {
-        [self.dict_selected setObject:[[NSMutableArray alloc] init] forKey:[[(NSDictionary *)[self.arr_l1 objectAtIndex:i] objectForKey:@"id"] stringValue]];
+    if (self.dataSelected != nil) [self.dataSelected removeAllObjects];
+    else self.dataSelected = [[NSMutableDictionary alloc] init];
+    for(int i=0; i<self.arrL.count; i++) {
+        [self.dataSelected setObject:[[NSMutableArray alloc] init] forKey:[[(NSDictionary *)[self.arrL objectAtIndex:i] objectForKey:@"id"] stringValue]];
     }
-    NSLog(@"%@",self.dict_selected);
+    NSLog(@"%@",self.dataSelected);
 }
 
 #pragma mark 确定按钮事件
@@ -378,6 +264,15 @@
     [self okDone];
 }
 -(void)okDone {
-    NSLog(@"%@",self.dict_selected);
+    NSLog(@"%@",self.dataSelected);
 }
+
+#pragma mark JSON字符串转NSArray
+-(NSArray *)jsonStrToArr:(NSString*)jsonStr {
+    NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+    id jsonObj       = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+    NSArray *arr     = [(NSDictionary *)jsonObj objectForKey:@"data"];
+    return arr;
+}
+
 @end
