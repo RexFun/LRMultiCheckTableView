@@ -198,12 +198,15 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     // 2.创建
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
     if (tableView == self.tb_l) {
         NSDictionary *_d     = (NSDictionary *)[self.arrL objectAtIndex:indexPath.row];
         cell.tag             = [_d objectForKey:@"id"];
         cell.textLabel.text  = [NSString stringWithFormat: @"%@", [_d objectForKey:@"name"]];
+        //
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.detailTextLabel.text = @"全部";
         // 判断选中背景变色
         cell.selectionStyle  = UITableViewCellSelectionStyleNone;
         if(cell.tag == self.curIndex) cell.backgroundColor = UIColorFromRGB(0xF0F0F0);
