@@ -175,8 +175,7 @@
     }
     self.arrL = [self jsonStrToArr:[delegate didLoadDataToViewL]];
     self.arrR = [self jsonStrToArr:[delegate didLoadDataToViewR:[self.arrL objectAtIndex:0]]];
-    self.curIndex = [(NSDictionary *)[self.arrL objectAtIndex:0] objectForKey:@"id"];
-    NSLog(@"%@",self.curIndex);
+    self.curRowIndexL = 0;
 }
 
 #pragma mark UITableViewDataSource
@@ -201,16 +200,19 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
     }
     if (tableView == self.tb_l) {
-        NSDictionary *_d     = (NSDictionary *)[self.arrL objectAtIndex:indexPath.row];
-        cell.tag             = [_d objectForKey:@"id"];
-        cell.textLabel.text  = [NSString stringWithFormat: @"%@", [_d objectForKey:@"name"]];
-        //
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.detailTextLabel.text = @"全部";
+        NSDictionary *_d    = (NSDictionary *)[self.arrL objectAtIndex:indexPath.row];
+        cell.tag            = [_d objectForKey:@"id"];
+        cell.textLabel.text = [NSString stringWithFormat: @"%@", [_d objectForKey:@"name"]];
+        cell.accessoryType  = UITableViewCellAccessoryDisclosureIndicator;
+        // 判断全部
+        NSDictionary *_ds = [self.dataSelected objectAtIndex:indexPath.row];
+        NSArray *_a       = [_ds objectForKey:@"items"];
+        if(_a.count > 0) cell.detailTextLabel.text = @"";
+        else             cell.detailTextLabel.text = @"全部";
         // 判断选中背景变色
         cell.selectionStyle  = UITableViewCellSelectionStyleNone;
-        if(cell.tag == self.curIndex) cell.backgroundColor = UIColorFromRGB(0xF0F0F0);
-        else                          cell.backgroundColor = [UIColor clearColor];
+        if(indexPath.row == self.curRowIndexL) cell.backgroundColor = UIColorFromRGB(0xF0F0F0);
+        else                                   cell.backgroundColor = [UIColor clearColor];
     } else if (tableView == self.tb_r) {
         NSDictionary *_d    = (NSDictionary *)[self.arrR objectAtIndex:indexPath.row];
         cell.tag            = [_d objectForKey:@"id"];
@@ -218,10 +220,11 @@
         // 判断选中打钩
         cell.selectionStyle  = UITableViewCellSelectionStyleNone;
         cell.backgroundColor = UIColorFromRGB(0xF0F0F0);
-        NSMutableArray *_arr = [self.dataSelected objectForKey:self.curIndex];
-        id _arr_obj          = [_d objectForKey:@"id"];
-        if ([_arr containsObject:_arr_obj]) cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        else                                cell.accessoryType = UITableViewCellAccessoryNone;
+        NSDictionary *_d_selected = [self.dataSelected objectAtIndex:self.curRowIndexL];
+        NSArray *_a_selected      = [_d_selected objectForKey:@"items"];
+        id _o                     = [_d objectForKey:@"id"];
+        if ([_a_selected containsObject:_o]) cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        else                                 cell.accessoryType = UITableViewCellAccessoryNone;
     }
     return cell;
 }
@@ -234,7 +237,7 @@
     // 左列表
     if (tableView == self.tb_l) {
         NSDictionary *selectedItemDict = (NSDictionary *)[self.arrL objectAtIndex:indexPath.row];
-        self.curIndex = [selectedItemDict objectForKey:@"id"];
+        self.curRowIndexL = indexPath.row;
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             // 处理耗时操作的代码块...
             self.arrR = [self jsonStrToArr:[delegate didLoadDataToViewR:selectedItemDict]];
@@ -248,14 +251,15 @@
     }
     // 右列表
     else if (tableView == self.tb_r) {
-        NSMutableArray *_arr = [self.dataSelected objectForKey:self.curIndex];
-        id _arr_obj          = [[self.arrR objectAtIndex:indexPath.row] objectForKey:@"id"];
-        if (![_arr containsObject:_arr_obj])
-            [_arr addObject:_arr_obj];
+        NSDictionary *_d_selected   = [self.dataSelected objectAtIndex:self.curRowIndexL];
+        NSMutableArray *_a_selected = [_d_selected objectForKey:@"items"];
+        id _o                       = [[self.arrR objectAtIndex:indexPath.row] objectForKey:@"id"];
+        if (![_a_selected containsObject:_o])
+            [_a_selected addObject:_o];
         else
-            [_arr removeObject:_arr_obj];
+            [_a_selected removeObject:_o];
+        [self.tb_l reloadData];
         [self.tb_r reloadData];
-        NSLog(@"after -> %@",_arr);
     }
 }
 
@@ -294,11 +298,13 @@
 }
 -(void)resetDone {
     if (self.dataSelected != nil) [self.dataSelected removeAllObjects];
-    else self.dataSelected = [[NSMutableDictionary alloc] init];
+    else self.dataSelected = [[NSMutableArray alloc] init];
     for(int i=0; i<self.arrL.count; i++) {
-        [self.dataSelected setObject:[[NSMutableArray alloc] init] forKey:[(NSDictionary *)[self.arrL objectAtIndex:i] objectForKey:@"id"]];
+        NSMutableDictionary *item = [[NSMutableDictionary alloc]init];
+        [item setObject:[(NSDictionary *)[self.arrL objectAtIndex:i] objectForKey:@"id"] forKey:@"id"];
+        [item setObject:[[NSMutableArray alloc] init] forKey:@"items"];
+        [self.dataSelected addObject:item];
     }
-    NSLog(@"%@",self.dataSelected);
 }
 
 #pragma mark 确定按钮事件
@@ -314,7 +320,7 @@
 -(NSArray *)jsonStrToArr:(NSString*)jsonStr {
     NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
     id jsonObj       = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-    NSArray *arr     = [(NSDictionary *)jsonObj objectForKey:@"data"];
+    NSArray *arr     = (NSArray *)jsonObj;
     return arr;
 }
 

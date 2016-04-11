@@ -31,16 +31,17 @@
 @property (nonatomic, strong) UIButton    *btn_reset;
 @property (nonatomic, strong) UIButton    *btn_ok;
 
-@property id curIndex;
+@property NSInteger *curRowIndexL;
 
 /* 已选数组集合，数据结构：
-
- {key:[1,2,3,...]},
- {key:[1,2,3,...]},
- {key:[1,2,3,...]},
- ...
+ [
+    {id:"11", items:[1,2,3,...]},
+    {id:"12", items:[1,2,3,...]},
+    {id:"13", items:[1,2,3,...]},
+    ...
+ ]
  */
-@property (nonatomic, strong) NSMutableDictionary *dataSelected;
+@property (nonatomic, strong) NSMutableArray *dataSelected;
 
 @end
 

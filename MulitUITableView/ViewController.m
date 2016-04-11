@@ -22,12 +22,12 @@
 }
 
 - (NSString *)didLoadDataToViewL {
-    return [NSString stringWithFormat:@"{\"data\":[{\"id\":1,\"name\":\"A\"},{\"id\":2,\"name\":\"B\"},{\"id\":3,\"name\":\"C\"},{\"id\":4,\"name\":\"D\"},{\"id\":5,\"name\":\"E\"},{\"id\":6,\"name\":\"F\"}]}"];
+    return [NSString stringWithFormat:@"[{\"id\":11,\"name\":\"A\"},{\"id\":12,\"name\":\"B\"},{\"id\":13,\"name\":\"C\"},{\"id\":14,\"name\":\"D\"},{\"id\":15,\"name\":\"E\"},{\"id\":16,\"name\":\"F\"}]"];
 }
 
 - (NSString *)didLoadDataToViewR:(id)itemViewL {
     NSDictionary *d = (NSDictionary*)itemViewL;
     NSLog(@"selectedItemL -> %@",d);
-    return [NSString stringWithFormat:@"{\"data\":[{\"id\":1,\"name\":\"%@_1\"},{\"id\":2,\"name\":\"%@_2\"},{\"id\":3,\"name\":\"%@_3\"},{\"id\":4,\"name\":\"%@_4\"},{\"id\":5,\"name\":\"%@_5\"},{\"id\":6,\"name\":\"%@_6\"}]}",[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"]];
+    return [NSString stringWithFormat:@"[{\"id\":1,\"name\":\"%@_1\"},{\"id\":2,\"name\":\"%@_2\"},{\"id\":3,\"name\":\"%@_3\"},{\"id\":4,\"name\":\"%@_4\"},{\"id\":5,\"name\":\"%@_5\"},{\"id\":6,\"name\":\"%@_6\"}]",[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"]];
 }
 @end
