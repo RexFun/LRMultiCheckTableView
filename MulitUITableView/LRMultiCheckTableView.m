@@ -25,14 +25,14 @@
 // setter
 - (void)setDelegate:(id <LRMultiCheckTableViewDelegate>)_delegate {
     delegate = _delegate;
-    [self drawView];
+    [self showView];
 }
 // getter
 - (id <LRMultiCheckTableViewDelegate>)delegate {
     return delegate;
 }
 
-- (void)drawView {
+- (void)showView {
     [self didLoadDataToView];
     [self resetDone];
     [self setBackgroundColor:[UIColor blackColor]];

@@ -12,39 +12,69 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tb_LRMC = [[LRMultiCheckTableView alloc] init];
-    self.tb_LRMC.delegate = self;
-    [self.view addSubview:self.tb_LRMC];
-    // 布局约束
-    self.tb_LRMC.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
-                                                     attribute:NSLayoutAttributeWidth
-                                                     relatedBy:NSLayoutRelationEqual
-                                                        toItem:self.view
-                                                     attribute:NSLayoutAttributeWidth
-                                                    multiplier:1
-                                                      constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
-                                                     attribute:NSLayoutAttributeHeight
-                                                     relatedBy:NSLayoutRelationEqual
-                                                        toItem:self.view
-                                                     attribute:NSLayoutAttributeHeight
-                                                    multiplier:1
-                                                      constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
-                                                     attribute:NSLayoutAttributeBottom
-                                                     relatedBy:NSLayoutRelationEqual
-                                                        toItem:self.view
-                                                     attribute:NSLayoutAttributeBottom
-                                                    multiplier:1
-                                                      constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
-                                                     attribute:NSLayoutAttributeLeft
-                                                     relatedBy:NSLayoutRelationEqual
-                                                        toItem:self.view
-                                                     attribute:NSLayoutAttributeLeft
-                                                    multiplier:1
-                                                      constant:0]];
+    self.btn = [[UIButton alloc]init];
+
+    [self.btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.btn setTitle:@"弹出" forState:UIControlStateNormal];
+    [self.btn addTarget:self action:@selector(clickTap) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.btn];
+    
+    self.btn.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.btn
+                                                          attribute:NSLayoutAttributeWidth
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeWidth
+                                                         multiplier:0
+                                                           constant:60]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.btn
+                                                          attribute:NSLayoutAttributeHeight
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeHeight
+                                                         multiplier:0
+                                                           constant:60]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.btn
+                                                          attribute:NSLayoutAttributeLeft
+                                                          relatedBy:NSLayoutRelationEqual
+                                                             toItem:self.view
+                                                          attribute:NSLayoutAttributeLeft
+                                                         multiplier:0.5
+                                                           constant:0]];
+    
+//    self.tb_LRMC = [[LRMultiCheckTableView alloc] init];
+//    self.tb_LRMC.delegate = self;
+//    [self.view addSubview:self.tb_LRMC];
+//    // 布局约束
+//    self.tb_LRMC.translatesAutoresizingMaskIntoConstraints = NO;
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
+//                                                     attribute:NSLayoutAttributeWidth
+//                                                     relatedBy:NSLayoutRelationEqual
+//                                                        toItem:self.view
+//                                                     attribute:NSLayoutAttributeWidth
+//                                                    multiplier:1
+//                                                      constant:0]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
+//                                                     attribute:NSLayoutAttributeHeight
+//                                                     relatedBy:NSLayoutRelationEqual
+//                                                        toItem:self.view
+//                                                     attribute:NSLayoutAttributeHeight
+//                                                    multiplier:1
+//                                                      constant:0]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
+//                                                     attribute:NSLayoutAttributeBottom
+//                                                     relatedBy:NSLayoutRelationEqual
+//                                                        toItem:self.view
+//                                                     attribute:NSLayoutAttributeBottom
+//                                                    multiplier:1
+//                                                      constant:0]];
+//    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
+//                                                     attribute:NSLayoutAttributeLeft
+//                                                     relatedBy:NSLayoutRelationEqual
+//                                                        toItem:self.view
+//                                                     attribute:NSLayoutAttributeLeft
+//                                                    multiplier:1
+//                                                      constant:0]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,5 +93,29 @@
 
 - (void)getResultData:(id)data {
     NSLog(@"data -> %@", data);
+    [self.controller_div dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+-(void)clickTap {
+    self.tb_lrmc                               = [[LRMultiCheckTableView alloc] init];
+    self.tb_lrmc.delegate                      = self;
+    
+    self.controller_div                        = [[UIViewController alloc]init];
+    self.controller_div.view                   = self.tb_lrmc;
+    self.controller_div.modalPresentationStyle = UIModalPresentationPopover;
+    
+    self.controller_pop                        = self.controller_div.popoverPresentationController;
+    self.controller_pop.delegate               = self;
+    self.controller_pop.sourceView             = self.btn;
+    self.controller_pop.sourceRect             = self.btn.frame;
+    
+    [self presentViewController:self.controller_div animated:YES completion:nil];
+}
+
+//.FullScreen or .OverFullScreen, the difference being that fullscreen will remove the presenting view controller's view,
+//whereas over-fullscreen won't.
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller{
+    return UIModalPresentationNone;
 }
 @end

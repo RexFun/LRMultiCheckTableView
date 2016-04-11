@@ -9,7 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "LRMultiCheckTableView.h"
 
-@interface ViewController : UIViewController <LRMultiCheckTableViewDelegate>
-@property (nonatomic, strong) LRMultiCheckTableView *tb_LRMC;
+@interface ViewController : UIViewController <UIPopoverPresentationControllerDelegate,LRMultiCheckTableViewDelegate>
+@property (nonatomic, strong) UIPopoverPresentationController *controller_pop;
+@property (nonatomic, strong) UIViewController *controller_div;
+@property (nonatomic, strong) LRMultiCheckTableView *tb_lrmc;
+@property (nonatomic, strong) UIButton *btn;
 @end
 
