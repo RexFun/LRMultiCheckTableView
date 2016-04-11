@@ -8,12 +8,12 @@
 
 #import "LRMultiCheckTableView.h"
 
-// rgb颜色转换（16进制->10进制）
+// 宏 rgb颜色转换（16进制->10进制）
 #define UIColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
-// 获取RGB颜色
+// 宏 获取RGB颜色
 #define RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
 #define RGB(r,g,b) RGBA(r,g,b,1.0f)
-
+// 宏 屏幕尺寸
 #define WEIGHT [UIScreen mainScreen].bounds.size.width
 #define HEIGHT [UIScreen mainScreen].bounds.size.height
 #define MAIN_VIEW_W [UIScreen mainScreen].bounds.size.width-20
@@ -35,10 +35,9 @@
 - (void)drawView {
     [self didLoadDataToView];
     [self resetDone];
-    self.frame = CGRectMake(10, 20, MAIN_VIEW_W , MAIN_VIEW_H);
     [self setBackgroundColor:[UIColor blackColor]];
     // 左列表
-    self.tb_l            = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, TB_VIEW_W ,MAIN_VIEW_H)];
+    self.tb_l            = [[UITableView alloc] init];
     self.tb_l.dataSource = self;
     self.tb_l.delegate   = self;
     // 默认选中第一行
@@ -48,7 +47,7 @@
     self.tb_l.tableFooterView = [[UIView alloc]init];//去掉多余分割线
     [self addSubview:self.tb_l];
     // 右列表
-    self.tb_r            = [[UITableView alloc] initWithFrame:CGRectMake(TB_VIEW_W, 0, TB_VIEW_W ,MAIN_VIEW_H)];
+    self.tb_r            = [[UITableView alloc] init];
     self.tb_r.dataSource = self;
     self.tb_r.delegate   = self;
     self.tb_r.tableFooterView = [[UIView alloc]init];//去掉多余分割线
@@ -76,6 +75,66 @@
 }
 
 - (void)initConstraint {
+    // 设置控件约束 # 左边tableview
+    self.tb_l.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_l
+                                                     attribute:NSLayoutAttributeWidth
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeWidth
+                                                    multiplier:0.5
+                                                      constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_l
+                                                     attribute:NSLayoutAttributeHeight
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeHeight
+                                                    multiplier:1
+                                                      constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_l
+                                                     attribute:NSLayoutAttributeBottom
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeBottom
+                                                    multiplier:1
+                                                      constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_l
+                                                     attribute:NSLayoutAttributeLeft
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeLeft
+                                                    multiplier:1
+                                                      constant:0]];
+    // 设置控件约束 # 右边tableview
+    self.tb_r.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_r
+                                                     attribute:NSLayoutAttributeWidth
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeWidth
+                                                    multiplier:0.5
+                                                      constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_r
+                                                     attribute:NSLayoutAttributeHeight
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeHeight
+                                                    multiplier:1
+                                                      constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_r
+                                                     attribute:NSLayoutAttributeBottom
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeBottom
+                                                    multiplier:1
+                                                      constant:0]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_r
+                                                     attribute:NSLayoutAttributeRight
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeRight
+                                                    multiplier:1
+                                                      constant:0]];
     // 设置控件约束 # 底部操作栏
     self.bar_bottom.translatesAutoresizingMaskIntoConstraints = NO;
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bar_bottom
@@ -91,7 +150,7 @@
                                                             toItem:nil
                                                          attribute:NSLayoutAttributeHeight
                                                         multiplier:0
-                                                          constant:80]];
+                                                          constant:70]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bar_bottom
                                                          attribute:NSLayoutAttributeBottom
                                                          relatedBy:NSLayoutRelationEqual

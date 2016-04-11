@@ -15,6 +15,36 @@
     self.tb_LRMC = [[LRMultiCheckTableView alloc] init];
     self.tb_LRMC.delegate = self;
     [self.view addSubview:self.tb_LRMC];
+    // 布局约束
+    self.tb_LRMC.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
+                                                     attribute:NSLayoutAttributeWidth
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self.view
+                                                     attribute:NSLayoutAttributeWidth
+                                                    multiplier:1
+                                                      constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
+                                                     attribute:NSLayoutAttributeHeight
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self.view
+                                                     attribute:NSLayoutAttributeHeight
+                                                    multiplier:1
+                                                      constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
+                                                     attribute:NSLayoutAttributeBottom
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self.view
+                                                     attribute:NSLayoutAttributeBottom
+                                                    multiplier:1
+                                                      constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_LRMC
+                                                     attribute:NSLayoutAttributeLeft
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self.view
+                                                     attribute:NSLayoutAttributeLeft
+                                                    multiplier:1
+                                                      constant:0]];
 }
 
 - (void)didReceiveMemoryWarning {
