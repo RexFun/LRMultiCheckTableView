@@ -12,6 +12,7 @@
 @required
 - (NSString *)didLoadDataToViewL;
 - (NSString *)didLoadDataToViewR:(id)itemViewL;
+- (void)getResultData:(id)data;
 @end
 
 @interface LRMultiCheckTableView : UIView <UITableViewDataSource,UITableViewDelegate>

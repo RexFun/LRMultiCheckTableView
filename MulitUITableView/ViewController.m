@@ -60,4 +60,8 @@
     NSLog(@"selectedItemL -> %@",d);
     return [NSString stringWithFormat:@"[{\"id\":1,\"name\":\"%@_1\"},{\"id\":2,\"name\":\"%@_2\"},{\"id\":3,\"name\":\"%@_3\"},{\"id\":4,\"name\":\"%@_4\"},{\"id\":5,\"name\":\"%@_5\"},{\"id\":6,\"name\":\"%@_6\"}]",[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"],[d objectForKey:@"name"]];
 }
+
+- (void)getResultData:(id)data {
+    NSLog(@"data -> %@", data);
+}
 @end

@@ -372,7 +372,7 @@
     [self okDone];
 }
 -(void)okDone {
-    NSLog(@"%@",self.dataSelected);
+    [self.delegate getResultData:self.dataSelected];
 }
 
 #pragma mark JSON字符串转NSArray
