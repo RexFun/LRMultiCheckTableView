@@ -98,12 +98,17 @@
 
 
 -(void)clickTap {
-    self.tb_lrmc                               = [[LRMultiCheckTableView alloc] init];
-    self.tb_lrmc.delegate                      = self;
-    
-    self.controller_div                        = [[UIViewController alloc]init];
-    self.controller_div.view                   = self.tb_lrmc;
-    self.controller_div.modalPresentationStyle = UIModalPresentationPopover;
+    // 二次点击时，不需重新实例化UIViewController，保留上次选过的记录
+    if (self.controller_div == nil) {
+        NSLog(@"it's nil!");
+        self.tb_lrmc                               = [[LRMultiCheckTableView alloc] init];
+        self.tb_lrmc.delegate                      = self;
+        self.controller_div                        = [[UIViewController alloc]init];
+        self.controller_div.view                   = self.tb_lrmc;
+        self.controller_div.modalPresentationStyle = UIModalPresentationPopover;
+    } else {
+        NSLog(@"it's not nil!");
+    }
     
     self.controller_pop                        = self.controller_div.popoverPresentationController;
     self.controller_pop.delegate               = self;
