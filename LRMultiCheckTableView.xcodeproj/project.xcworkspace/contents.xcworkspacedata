@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:MulitUITableView.xcodeproj">
+      location = "self:/Users/mac373/dev/IOS/Studys/UIKit/MulitUITableView/LRMultiCheckTableView.xcodeproj">
    </FileRef>
 </Workspace>

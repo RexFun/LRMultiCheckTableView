@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "716882FA1CACEE790092C884"
-               BuildableName = "MulitUITableView.app"
-               BlueprintName = "MulitUITableView"
-               ReferencedContainer = "container:MulitUITableView.xcodeproj">
+               BuildableName = "LRMultiCheckTableView.app"
+               BlueprintName = "LRMultiCheckTableView"
+               ReferencedContainer = "container:LRMultiCheckTableView.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "716882FA1CACEE790092C884"
-            BuildableName = "MulitUITableView.app"
-            BlueprintName = "MulitUITableView"
-            ReferencedContainer = "container:MulitUITableView.xcodeproj">
+            BuildableName = "LRMultiCheckTableView.app"
+            BlueprintName = "LRMultiCheckTableView"
+            ReferencedContainer = "container:LRMultiCheckTableView.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -56,9 +56,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "716882FA1CACEE790092C884"
-            BuildableName = "MulitUITableView.app"
-            BlueprintName = "MulitUITableView"
-            ReferencedContainer = "container:MulitUITableView.xcodeproj">
+            BuildableName = "LRMultiCheckTableView.app"
+            BlueprintName = "LRMultiCheckTableView"
+            ReferencedContainer = "container:LRMultiCheckTableView.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,9 +75,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "716882FA1CACEE790092C884"
-            BuildableName = "MulitUITableView.app"
-            BlueprintName = "MulitUITableView"
-            ReferencedContainer = "container:MulitUITableView.xcodeproj">
+            BuildableName = "LRMultiCheckTableView.app"
+            BlueprintName = "LRMultiCheckTableView"
+            ReferencedContainer = "container:LRMultiCheckTableView.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
