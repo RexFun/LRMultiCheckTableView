@@ -90,12 +90,19 @@
                                                         toItem:self
                                                      attribute:NSLayoutAttributeHeight
                                                     multiplier:1
+                                                      constant:-70]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_l
+                                                     attribute:NSLayoutAttributeTop
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeTop
+                                                    multiplier:1
                                                       constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_l
                                                      attribute:NSLayoutAttributeBottom
                                                      relatedBy:NSLayoutRelationEqual
-                                                        toItem:self
-                                                     attribute:NSLayoutAttributeBottom
+                                                        toItem:self.bar_bottom
+                                                     attribute:NSLayoutAttributeTop
                                                     multiplier:1
                                                       constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_l
@@ -120,12 +127,19 @@
                                                         toItem:self
                                                      attribute:NSLayoutAttributeHeight
                                                     multiplier:1
+                                                      constant:-70]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_r
+                                                     attribute:NSLayoutAttributeTop
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeTop
+                                                    multiplier:1
                                                       constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_r
                                                      attribute:NSLayoutAttributeBottom
                                                      relatedBy:NSLayoutRelationEqual
-                                                        toItem:self
-                                                     attribute:NSLayoutAttributeBottom
+                                                        toItem:self.bar_bottom
+                                                     attribute:NSLayoutAttributeTop
                                                     multiplier:1
                                                       constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.tb_r
@@ -138,93 +152,93 @@
     // 设置控件约束 # 底部操作栏
     self.bar_bottom.translatesAutoresizingMaskIntoConstraints = NO;
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bar_bottom
-                                                         attribute:NSLayoutAttributeWidth
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeWidth
-                                                        multiplier:1
-                                                          constant:0]];
+                                                     attribute:NSLayoutAttributeWidth
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeWidth
+                                                    multiplier:1
+                                                      constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bar_bottom
-                                                         attribute:NSLayoutAttributeHeight
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:nil
-                                                         attribute:NSLayoutAttributeHeight
-                                                        multiplier:0
-                                                          constant:70]];
+                                                     attribute:NSLayoutAttributeHeight
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:nil
+                                                     attribute:NSLayoutAttributeHeight
+                                                    multiplier:0
+                                                      constant:70]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bar_bottom
-                                                         attribute:NSLayoutAttributeBottom
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeBottom
-                                                        multiplier:1
-                                                          constant:0]];
+                                                     attribute:NSLayoutAttributeBottom
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeBottom
+                                                    multiplier:1
+                                                      constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.bar_bottom
-                                                         attribute:NSLayoutAttributeLeft
-                                                         relatedBy:NSLayoutRelationEqual
-                                                            toItem:self
-                                                         attribute:NSLayoutAttributeLeft
-                                                        multiplier:1
-                                                          constant:0]];
+                                                     attribute:NSLayoutAttributeLeft
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self
+                                                     attribute:NSLayoutAttributeLeft
+                                                    multiplier:1
+                                                      constant:0]];
     // 设置控件约束 # 底部操作栏 # 重置按钮
     self.btn_reset.translatesAutoresizingMaskIntoConstraints  = NO;
     [self.bar_bottom addConstraint:[NSLayoutConstraint constraintWithItem:self.btn_reset
-                                                              attribute:NSLayoutAttributeLeft
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.bar_bottom
-                                                              attribute:NSLayoutAttributeLeft
-                                                             multiplier:1
-                                                               constant:0]];
+                                                                attribute:NSLayoutAttributeLeft
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.bar_bottom
+                                                                attribute:NSLayoutAttributeLeft
+                                                               multiplier:1
+                                                                 constant:0]];
     [self.bar_bottom addConstraint:[NSLayoutConstraint constraintWithItem:self.btn_reset
-                                                              attribute:NSLayoutAttributeBottom
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.bar_bottom
-                                                              attribute:NSLayoutAttributeBottom
-                                                             multiplier:1
-                                                               constant:0]];
+                                                                attribute:NSLayoutAttributeBottom
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.bar_bottom
+                                                                attribute:NSLayoutAttributeBottom
+                                                               multiplier:1
+                                                                 constant:0]];
     [self.bar_bottom addConstraint:[NSLayoutConstraint constraintWithItem:self.btn_reset
-                                                              attribute:NSLayoutAttributeWidth
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.bar_bottom
-                                                              attribute:NSLayoutAttributeWidth
-                                                             multiplier:0.5
-                                                               constant:0]];
+                                                                attribute:NSLayoutAttributeWidth
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.bar_bottom
+                                                                attribute:NSLayoutAttributeWidth
+                                                               multiplier:0.5
+                                                                 constant:0]];
     [self.bar_bottom addConstraint:[NSLayoutConstraint constraintWithItem:self.btn_reset
-                                                              attribute:NSLayoutAttributeHeight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.bar_bottom
-                                                              attribute:NSLayoutAttributeHeight
-                                                             multiplier:1
-                                                               constant:-0.5]];
+                                                                attribute:NSLayoutAttributeHeight
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.bar_bottom
+                                                                attribute:NSLayoutAttributeHeight
+                                                               multiplier:1
+                                                                 constant:-0.5]];
     // 设置控件约束 # 底部操作栏 # 确定按钮
     self.btn_ok.translatesAutoresizingMaskIntoConstraints     = NO;
     [self.bar_bottom addConstraint:[NSLayoutConstraint constraintWithItem:self.btn_ok
-                                                              attribute:NSLayoutAttributeRight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.bar_bottom
-                                                              attribute:NSLayoutAttributeRight
-                                                             multiplier:1
-                                                               constant:0]];
+                                                                attribute:NSLayoutAttributeRight
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.bar_bottom
+                                                                attribute:NSLayoutAttributeRight
+                                                               multiplier:1
+                                                                 constant:0]];
     [self.bar_bottom addConstraint:[NSLayoutConstraint constraintWithItem:self.btn_ok
-                                                              attribute:NSLayoutAttributeBottom
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.bar_bottom
-                                                              attribute:NSLayoutAttributeBottom
-                                                             multiplier:1
-                                                               constant:0]];
+                                                                attribute:NSLayoutAttributeBottom
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.bar_bottom
+                                                                attribute:NSLayoutAttributeBottom
+                                                               multiplier:1
+                                                                 constant:0]];
     [self.bar_bottom addConstraint:[NSLayoutConstraint constraintWithItem:self.btn_ok
-                                                              attribute:NSLayoutAttributeWidth
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.bar_bottom
-                                                              attribute:NSLayoutAttributeWidth
-                                                             multiplier:0.5
-                                                               constant:0]];
+                                                                attribute:NSLayoutAttributeWidth
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.bar_bottom
+                                                                attribute:NSLayoutAttributeWidth
+                                                               multiplier:0.5
+                                                                 constant:0]];
     [self.bar_bottom addConstraint:[NSLayoutConstraint constraintWithItem:self.btn_ok
-                                                              attribute:NSLayoutAttributeHeight
-                                                              relatedBy:NSLayoutRelationEqual
-                                                                 toItem:self.bar_bottom
-                                                              attribute:NSLayoutAttributeHeight
-                                                             multiplier:1
-                                                               constant:0]];
+                                                                attribute:NSLayoutAttributeHeight
+                                                                relatedBy:NSLayoutRelationEqual
+                                                                   toItem:self.bar_bottom
+                                                                attribute:NSLayoutAttributeHeight
+                                                               multiplier:1
+                                                                 constant:0]];
 }
 
 - (void)didLoadDataToView {
@@ -345,8 +359,8 @@
             [cell setLayoutMargins:UIEdgeInsetsZero];
         }
     }
-//     不要分割线
-//    if (tableView == self.tb_r) tableView.separatorStyle = NO;
+    //     不要分割线
+    //    if (tableView == self.tb_r) tableView.separatorStyle = NO;
 }
 
 #pragma mark 重置按钮事件
