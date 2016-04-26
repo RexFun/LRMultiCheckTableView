@@ -17,7 +17,7 @@
 
 @interface LRMultiCheckTableView : UIView <UITableViewDataSource,UITableViewDelegate>
 {
-     id <LRMultiCheckTableViewDelegate> delegate;
+    id <LRMultiCheckTableViewDelegate> delegate;
 }
 // setter
 - (void)setDelegate:(id <LRMultiCheckTableViewDelegate>)_delegate;
@@ -28,6 +28,7 @@
 @property (nonatomic, strong) NSArray     *arrR;
 @property (nonatomic, strong) UITableView *tb_l;
 @property (nonatomic, strong) UITableView *tb_r;
+@property (nonatomic, strong) UIRefreshControl *rc_tb_l;
 @property (nonatomic, strong) UIView      *bar_bottom;
 @property (nonatomic, strong) UIButton    *btn_reset;
 @property (nonatomic, strong) UIButton    *btn_ok;
@@ -36,10 +37,10 @@
 
 /* 已选数组集合，数据结构：
  [
-    {id:"11", items:[1,2,3,...]},
-    {id:"12", items:[1,2,3,...]},
-    {id:"13", items:[1,2,3,...]},
-    ...
+ {id:"11", items:[1,2,3,...]},
+ {id:"12", items:[1,2,3,...]},
+ {id:"13", items:[1,2,3,...]},
+ ...
  ]
  */
 @property (nonatomic, strong) NSMutableArray *dataSelected;

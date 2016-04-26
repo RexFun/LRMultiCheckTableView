@@ -32,27 +32,38 @@
     return delegate;
 }
 
+# pragma 显示视图
+
 - (void)showView {
-    [self didLoadDataToView];
+    [self didLoadDataToArrLR];
     [self resetDone];
     [self setBackgroundColor:[UIColor blackColor]];
-    // 左列表
+    
+    /* 左列表 */
     self.tb_l            = [[UITableView alloc] init];
     self.tb_l.dataSource = self;
     self.tb_l.delegate   = self;
+    // 下拉刷新
+    self.rc_tb_l = [[UIRefreshControl alloc] init];
+    [self.rc_tb_l addTarget:self action:@selector(pullDownRefresh) forControlEvents:UIControlEventValueChanged];
+    [self.tb_l addSubview:self.rc_tb_l];
     // 默认选中第一行
     [self.tb_l selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]
                            animated:YES
                      scrollPosition:UITableViewScrollPositionTop];
-    self.tb_l.tableFooterView = [[UIView alloc]init];//去掉多余分割线
+    //去掉多余分割线
+    self.tb_l.tableFooterView = [[UIView alloc]init];
     [self addSubview:self.tb_l];
-    // 右列表
+    
+    /* 右列表 */
     self.tb_r            = [[UITableView alloc] init];
     self.tb_r.dataSource = self;
     self.tb_r.delegate   = self;
-    self.tb_r.tableFooterView = [[UIView alloc]init];//去掉多余分割线
+    //去掉多余分割线
+    self.tb_r.tableFooterView = [[UIView alloc]init];
     [self addSubview:self.tb_r];
-    // 底部操作栏(采用约束布局)
+    
+    /* 底部操作栏(采用约束布局) */
     self.bar_bottom                 = [[UIView alloc] init];
     self.bar_bottom.backgroundColor = [UIColor lightGrayColor];
     // 底部操作栏 # 重置按钮
@@ -73,6 +84,8 @@
     //
     [self initConstraint];
 }
+
+# pragma 布局约束
 
 - (void)initConstraint {
     // 设置控件约束 # 左边tableview
@@ -241,7 +254,8 @@
                                                                  constant:0]];
 }
 
-- (void)didLoadDataToView {
+# pragma 加载数据(控件初始化时，加载至左右数组)
+- (void)didLoadDataToArrLR {
     if (delegate == nil) {
         NSLog(@"delegate is nil !");
         return;
@@ -303,6 +317,10 @@
 }
 
 #pragma mark UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 70;
+}
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     // 获取被选中的cell对象
@@ -367,6 +385,7 @@
 
 -(void)resetTap {
     [self resetDone];
+    [self.tb_l reloadData];
     [self.tb_r reloadData];
 }
 -(void)resetDone {
@@ -391,10 +410,23 @@
 
 #pragma mark JSON字符串转NSArray
 -(NSArray *)jsonStrToArr:(NSString*)jsonStr {
-    NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
-    id jsonObj       = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-    NSArray *arr     = (NSArray *)jsonObj;
-    return arr;
+    if (jsonStr != nil) {
+        NSData *jsonData = [jsonStr dataUsingEncoding:NSUTF8StringEncoding];
+        id jsonObj       = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
+        NSArray *arr     = (NSArray *)jsonObj;
+        return arr;
+    } else {
+        return nil;
+    }
+}
+
+#pragma 下拉刷新视图
+-(void)pullDownRefresh {
+    [self didLoadDataToArrLR];
+    [self resetDone];
+    [self.tb_l reloadData];
+    [self.tb_r reloadData];
+    [self.rc_tb_l endRefreshing];
 }
 
 @end
